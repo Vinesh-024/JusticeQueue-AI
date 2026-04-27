@@ -252,7 +252,11 @@ router.post('/optimize', async (req, res) => {
 // DELETE /api/cases/:id
 router.delete('/:id', async (req, res) => {
   try {
-    await Case.findByIdAndDelete(req.params.id);
+    try {
+      await Case.findByIdAndDelete(req.params.id);
+    } catch (dbErr) {
+      // Ignore CastError if deleting a UUID
+    }
     const idx = inMemoryStore.findIndex(c => c._id === req.params.id || c.id === req.params.id);
     if (idx !== -1) inMemoryStore.splice(idx, 1);
     res.json({ message: 'Case deleted' });
