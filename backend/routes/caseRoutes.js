@@ -124,7 +124,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 
       const aiResponse = await axios.post(`${AI_ENGINE_URL}/analyze`, form, {
         headers: form.getHeaders(),
-        timeout: 120000, // 2 min
+        timeout: 300000, // 5 min timeout for Render cold starts
       });
 
       const result = aiResponse.data;
