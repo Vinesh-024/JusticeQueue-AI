@@ -133,6 +133,12 @@ class LegalBertScorer:
         self._load()
 
     def _load(self) -> None:
+        import os
+        if os.environ.get("RENDER"):
+            log.warning("Running on Render Free Tier. Bypassing PyTorch Legal-BERT to prevent 502 OOM crashes. Using heuristic fallback.")
+            self._model = None
+            return
+
         try:
             from transformers import AutoTokenizer, AutoModel
             import torch
